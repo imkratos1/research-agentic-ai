@@ -1,0 +1,92 @@
+' shared colours and fonts so every PlantUML diagram in this project looks the same
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam defaultFontName Arial
+skinparam defaultFontSize 13
+skinparam defaultFontColor #263238
+skinparam backgroundColor #FFFFFF
+skinparam ArrowColor #546E7A
+skinparam ArrowFontSize 11
+skinparam ArrowFontColor #37474F
+skinparam TitleFontSize 18
+skinparam TitleFontColor #1A237E
+skinparam TitleFontStyle bold
+skinparam NoteBackgroundColor #FFF8E1
+skinparam NoteBorderColor #FFB300
+skinparam NoteFontSize 11
+skinparam LegendBackgroundColor #FAFAFA
+skinparam LegendBorderColor #B0BEC5
+skinparam LegendFontSize 11
+
+' sequence diagram
+skinparam SequenceLifeLineBorderColor #90A4AE
+skinparam SequenceGroupBorderColor #3949AB
+skinparam SequenceGroupHeaderFontColor #1A237E
+skinparam SequenceGroupBackgroundColor #E8EAF6
+skinparam SequenceDividerBackgroundColor #E8EAF6
+skinparam SequenceDividerBorderColor #3949AB
+skinparam SequenceDividerFontStyle bold
+skinparam SequenceDividerFontColor #1A237E
+skinparam SequenceBoxBorderColor #C5CAE9
+skinparam SequenceBoxFontColor #3949AB
+skinparam ParticipantBackgroundColor #E8EAF6
+skinparam ParticipantBorderColor #3949AB
+skinparam ActorBackgroundColor #E8EAF6
+skinparam ActorBorderColor #3949AB
+skinparam BoundaryBackgroundColor #E8EAF6
+skinparam BoundaryBorderColor #3949AB
+skinparam ControlBackgroundColor #C5CAE9
+skinparam ControlBorderColor #1A237E
+skinparam CollectionsBackgroundColor #E0F2F1
+skinparam CollectionsBorderColor #00897B
+skinparam DatabaseBackgroundColor #ECEFF1
+skinparam DatabaseBorderColor #546E7A
+
+' activity diagram
+skinparam ActivityBackgroundColor #E8EAF6
+skinparam ActivityBorderColor #3949AB
+skinparam ActivityDiamondBackgroundColor #FFF8E1
+skinparam ActivityDiamondBorderColor #FFB300
+skinparam ActivityStartColor #1A237E
+skinparam ActivityEndColor #1A237E
+skinparam SwimlaneTitleFontStyle bold
+skinparam SwimlaneTitleFontColor #1A237E
+skinparam SwimlaneBorderColor #B0BEC5
+
+' class diagram
+skinparam ClassBackgroundColor #FFFFFF
+skinparam ClassBorderColor #3949AB
+skinparam ClassHeaderBackgroundColor #E8EAF6
+skinparam ClassAttributeIconSize 0
+skinparam ClassFontStyle bold
+skinparam EnumBackgroundColor #FFF3E0
+skinparam EnumBorderColor #FB8C00
+skinparam CircledCharacterFontSize 11
+
+' state, deployment and entity relationship diagrams
+skinparam StateBackgroundColor #E8EAF6
+skinparam StateBorderColor #3949AB
+skinparam StateStartColor #1A237E
+skinparam StateEndColor #1A237E
+skinparam StateAttributeFontColor #455A64
+skinparam NodeBackgroundColor #F5F6FC
+skinparam NodeBorderColor #3949AB
+skinparam CloudBackgroundColor #FFF3E0
+skinparam CloudBorderColor #FB8C00
+skinparam FolderBackgroundColor #ECEFF1
+skinparam FolderBorderColor #546E7A
+skinparam ComponentBackgroundColor #E8EAF6
+skinparam ComponentBorderColor #3949AB
+skinparam ArtifactBackgroundColor #E0F2F1
+skinparam ArtifactBorderColor #00897B
+skinparam FileBackgroundColor #FFFFFF
+skinparam FileBorderColor #546E7A
+skinparam EntityBackgroundColor #FFFFFF
+skinparam EntityBorderColor #3949AB
+
+' use case diagram
+skinparam UsecaseBackgroundColor #E8EAF6
+skinparam UsecaseBorderColor #3949AB
+skinparam RectangleBorderColor #3949AB
+skinparam RectangleFontColor #1A237E
+skinparam RectangleFontStyle bold

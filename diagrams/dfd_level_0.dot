@@ -1,0 +1,33 @@
+// data flow diagram level 0 (context diagram) in Gane-Sarson notation, drawn with Graphviz (dot)
+digraph dfd_level_0 {
+  graph [fontname="Arial", rankdir=LR, nodesep=0.6, ranksep=1.3, pad=0.35,
+         label=<<b>Data flow diagram - level 0 (context diagram)</b>>, labelloc=t, fontsize=20, fontcolor="#1A237E"]
+  node  [fontname="Arial", fontsize=12, fontcolor="#263238"]
+  edge  [fontname="Arial", fontsize=10, color="#607D8B", fontcolor="#37474F", arrowsize=0.8, penwidth=1.1]
+
+  // external entities: plain shaded rectangles
+  node [shape=box, style=filled, fillcolor="#FFF3E0", color="#FB8C00", penwidth=1.5, margin="0.25,0.2", width=2]
+  user     [label=<<b>User</b>>]
+  gemini   [label=<<b>Gemini API</b>>]
+  searches [label=<<table border="0" cellspacing="0" cellpadding="1"><tr><td><b>Search services</b></td></tr><tr><td><font point-size="10">DuckDuckGo, Wikipedia, OpenAlex</font></td></tr></table>>]
+  websites [label=<<table border="0" cellspacing="0" cellpadding="1"><tr><td><b>Websites</b></td></tr><tr><td><font point-size="10">HTML pages and PDF files</font></td></tr></table>>]
+
+  // the whole system as one process
+  system [shape=plain, label=<
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="10" style="rounded" color="#1A237E" bgcolor="#E8EAF6">
+      <tr><td><b>0</b></td></tr>
+      <hr/>
+      <tr><td><b>DeepResearch Agent</b><br/><font point-size="10">plan, search, extract,<br/>cross-validate, write, publish</font></td></tr>
+    </table>>]
+
+  user -> system     [label="topic, depth"]
+  system -> user     [label="live progress,\nsources and claims tables,\nPDF report"]
+  system -> gemini   [label="prompts, claim text"]
+  gemini -> system   [label="questions, tool calls, claims,\nembeddings, report sections"]
+  system -> searches [label="search queries"]
+  searches -> system [label="result lists"]
+  system -> websites [label="page requests"]
+  websites -> system [label="page text"]
+
+  { rank=same; gemini; searches; websites }
+}

@@ -1,0 +1,115 @@
+@startuml er_diagram
+!include style.puml
+title Research data schema (logical view of state.json) - ER diagram
+hide circle
+skinparam linetype ortho
+
+entity "RUN" as run {
+  * folder : text <<PK>>
+  --
+  topic : text
+  depth : quick | standard | deep
+  started : datetime
+  phases_done : list of phase names
+  searches : list of text
+  failed_urls : list of text
+}
+
+entity "QUESTION" as question {
+  * id : text <<PK>>  (Q1, Q2 ...)
+  --
+  * run : <<FK>>
+  text : text
+  search_queries : list of text
+}
+
+entity "SOURCE" as source {
+  * id : text <<PK>>  (S1, S2 ...)
+  --
+  * run : <<FK>>
+  url : text <<unique>>
+  title, author, date : text
+  domain : text
+  tier : 1..4
+  weight : 0.0..1.0
+  reasons : list of text
+  found_by : web | news | wikipedia | openalex
+  abstract_only : boolean
+  text : text (up to 20,000 characters)
+}
+
+entity "QUESTION_SOURCE" as qs {
+  * question : <<FK>>
+  * source : <<FK>>
+}
+
+entity "CLAIM" as claim {
+  * id : text <<PK>>  (C1, C2 ...)
+  --
+  * question : <<FK>>
+  * source : <<FK>>
+  text : text
+  quote : text (found in the source)
+  kind : fact | statistic | opinion
+}
+
+entity "CLAIM_GROUP" as grp {
+  * id : text <<PK>>  (G1, G2 ...)
+  --
+  * question : <<FK>>
+  main_claim : text
+  confidence : VERIFIED | LIKELY | CONTESTED | UNVERIFIED
+  independent_sites : integer
+  score : number
+  note : text
+}
+
+entity "GROUP_MEMBER" as member {
+  * group : <<FK>>
+  * claim : <<FK>>
+}
+
+entity "GROUP_SOURCE" as gsrc {
+  * group : <<FK>>
+  * source : <<FK>>
+  --
+  role : supports | contradicts | partial
+}
+
+entity "REPORT" as report {
+  * run : <<PK, FK>>
+  --
+  title : text
+  contested : list of text
+  limitations : list of text
+}
+
+entity "SECTION" as section {
+  * report : <<FK>>
+  --
+  heading : text
+  paragraphs : list of text with [S#] citations
+}
+
+entity "KEY_FINDING" as finding {
+  * report : <<FK>>
+  --
+  confidence : label
+  text : text with [S#] citations
+}
+
+run ||--|{ question
+run ||--o{ source
+question ||--o{ qs
+source ||--o{ qs
+question ||--o{ claim
+source ||--o{ claim
+question ||--o{ grp
+grp ||--|{ member
+claim ||--o| member
+grp ||--|{ gsrc
+source ||--o{ gsrc
+run ||--o| report
+report ||--|{ section
+report ||--o{ finding
+@enduml

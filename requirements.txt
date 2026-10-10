@@ -1,0 +1,23 @@
+# Gemini API (Google Gen AI SDK)
+google-genai==2.29.0
+
+# searching and reading sources
+ddgs==9.16.0
+requests==2.34.2
+trafilatura==2.3.1
+pypdf==6.20.0
+tldextract==5.4.0
+
+# data handling
+pydantic==2.14.0
+numpy==2.5.3
+PyYAML==6.0.3
+python-dotenv==1.2.4
+
+# report, charts and web UI
+reportlab==5.0.1
+matplotlib==3.11.2
+streamlit[pdf]==1.65.0
+
+# testing
+pytest==9.1.1

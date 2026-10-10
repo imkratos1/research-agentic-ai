@@ -1,0 +1,39 @@
+@startuml use_case
+!include style.puml
+title DeepResearch Agent - use case diagram
+left to right direction
+
+actor "User\n(student or researcher)" as user
+actor "Gemini API" as gemini #FFF3E0
+actor "Search services\n(DuckDuckGo, Wikipedia,\nOpenAlex)" as searchers #FFF3E0
+
+rectangle "DeepResearch Agent" {
+  usecase "Start research\non a topic" as start
+  usecase "Choose depth\n(quick, standard, deep)" as depth
+  usecase "Watch live progress" as progress
+  usecase "Review sources\nand trust tiers" as sources
+  usecase "Review claims and\nconfidence labels" as claims
+  usecase "Download PDF report" as download
+  usecase "Edit trusted\nsource list" as trust
+  usecase "Search and read\nsources" as research
+  usecase "Cross-validate\nfacts" as validate
+  usecase "Write cited report" as write
+}
+
+user --> start
+user --> progress
+user --> sources
+user --> claims
+user --> download
+user --> trust
+
+depth .> start : <<extend>>
+start ..> research : <<include>>
+start ..> validate : <<include>>
+start ..> write : <<include>>
+
+research --> searchers
+research --> gemini
+validate --> gemini
+write --> gemini
+@enduml

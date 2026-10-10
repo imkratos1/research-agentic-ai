@@ -1,0 +1,38 @@
+# neo-brutalism theme for the DeepResearch Agent web page (the rest of the look is in style.css)
+[theme]
+base = "light"
+primaryColor = "#FF90E8"
+backgroundColor = "#FFF7E8"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#111111"
+linkColor = "#2340FF"
+borderColor = "#111111"
+showWidgetBorder = true
+baseRadius = "6px"
+font = "Space Grotesk:https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap, sans-serif"
+headingFont = "Archivo Black:https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap, sans-serif"
+codeFont = "Space Mono:https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap, monospace"
+headingFontWeights = 400
+dataframeHeaderBackgroundColor = "#FFD23F"
+dataframeBorderColor = "#111111"
+greenBackgroundColor = "#B8FF9F"
+greenTextColor = "#111111"
+blueBackgroundColor = "#A6FAFF"
+blueTextColor = "#111111"
+orangeBackgroundColor = "#FFD23F"
+orangeTextColor = "#111111"
+redBackgroundColor = "#FF8A80"
+redTextColor = "#111111"
+
+[theme.sidebar]
+backgroundColor = "#FFD23F"
+secondaryBackgroundColor = "#FFFFFF"
+
+[client]
+toolbarMode = "minimal"
+
+[browser]
+gatherUsageStats = false
+
+[server]
+headless = true

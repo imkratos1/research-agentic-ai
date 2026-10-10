@@ -1,0 +1,38 @@
+@startuml deployment
+!include style.puml
+title DeepResearch Agent - deployment diagram
+
+node "Student laptop (Windows 11)" as laptop {
+  node "Web browser" as browser {
+    artifact "Web page\n(neo-brutalism UI)" as page
+  }
+  node "Python 3.12 (.venv)" as python {
+    component "Streamlit server\napp.py, port 8501" as server
+    component "Agent package\nagent/*.py" as agent
+    component "Command line\nmain.py" as cli
+  }
+  folder "Project folder" as project {
+    file ".env\nAPI key, model IDs" as env
+    file "trusted_sources.yaml" as trust
+    database "runs/<id>/\nstate.json, trace.jsonl,\nreport.pdf" as runs
+    database "data/cache/" as cache
+    file "Report PDFs\n(main folder)" as pdfs
+  }
+}
+
+cloud "Google Gemini API\ngemini-3.5-flash-lite\ngemini-3.1-flash-lite\ngemini-embedding-2" as gemini
+cloud "Search services\nDuckDuckGo (ddgs),\nWikipedia API, OpenAlex API" as search
+cloud "Websites and PDFs" as web
+
+page --> server : HTTP + WebSocket
+server --> agent
+cli --> agent
+agent --> gemini : HTTPS
+agent --> search : HTTPS
+agent --> web : HTTPS
+agent ..> env : reads
+agent ..> trust : reads
+agent --> runs : writes
+agent --> cache : reads / writes
+agent --> pdfs : copies PDF
+@enduml

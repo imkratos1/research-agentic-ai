@@ -1,0 +1,68 @@
+@startuml sequence
+!include style.puml
+title One research run - sequence diagram
+autonumber "<b>0."
+hide footbox
+
+actor "User" as user
+boundary "Streamlit UI\n<size:10>app.py</size>" as ui
+control "Pipeline\n<size:10>pipeline.py</size>" as pipe
+box "Agent roles" #F5F6FC
+  participant "Researcher\n<size:10>researcher.py</size>" as res
+  participant "Verifier\n<size:10>verifier.py</size>" as ver
+  participant "Writer + Critic\n<size:10>writer.py</size>" as wri
+end box
+collections "Tools\n<size:10>search.py, fetch.py</size>\n<size:10>credibility.py</size>" as tools
+participant "Gemini API" as gem #FFF3E0
+participant "PDF builder\n<size:10>pdf_report.py</size>" as pdf
+database "Run folder\n<size:10>runs/<id>/</size>" as disk
+
+user -> ui : enter topic + depth
+ui -> pipe : run(topic, depth)
+
+== 1. Plan ==
+pipe -> gem : planner prompt + JSON schema
+gem --> pipe : 5-8 research questions with search queries
+
+== 2. Research (agent loop) ==
+pipe -> res : questions + source budget
+loop until each question has enough good sources, or the step budget is used up
+  res -> gem : conversation history + tool list
+  gem --> res : function call, e.g. web_search(query)
+  res -> tools : run the tool
+  tools --> res : results with trust tier
+  res -> gem : tool result, marked as untrusted data
+end
+res --> pipe : scored sources
+pipe --> ui : live progress events
+
+== 3. Extract ==
+pipe -> gem : source text, extract claims (gemini-3.1-flash-lite)
+gem --> pipe : claim + supporting quote + source id
+pipe -> pipe : keep a claim only if its quote is in the source
+
+== 4. Cross-validate ==
+pipe -> ver : all claims
+ver -> gem : embed claims (gemini-embedding-2)
+ver -> gem : does each source agree or contradict?
+ver -> ver : count independent websites, give labels
+alt some claims are unverified
+  ver -> tools : targeted search (web + OpenAlex)
+  tools --> ver : new tier 1-2 sources
+  ver -> gem : extract and check that question again
+end
+ver --> pipe : confidence label per claim group
+
+== 5. Write ==
+pipe -> wri : verified + likely claims
+wri -> gem : one section per question, then the summary
+wri -> wri : critic removes sentences without a source
+wri --> pipe : report sections (JSON)
+
+== 6. Publish ==
+pipe -> pdf : sections, sources, charts
+pdf -> disk : report.pdf
+pipe -> disk : state.json + trace.jsonl
+pipe --> ui : finished
+ui --> user : PDF preview + download
+@enduml

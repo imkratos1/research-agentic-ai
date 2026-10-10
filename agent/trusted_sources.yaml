@@ -1,0 +1,101 @@
+# Trust tiers used when cross-checking facts. Edit freely; any site not listed is tier 3.
+# weight = how much one source counts (0 to 1). It is a rough proxy for reliability, not a guarantee.
+
+tiers:
+  1:
+    label: Official or academic
+    weight: 0.9
+    # public suffixes exactly as tldextract reports them
+    suffixes: [gov, edu, mil, int, gov.in, nic.in, ac.in, edu.in, res.in, gov.uk, ac.uk, nhs.uk, gov.au, edu.au, gc.ca, gov.sg, edu.sg, go.jp, ac.jp]
+    domains:
+      - who.int
+      - un.org
+      - europa.eu
+      - worldbank.org
+      - oecd.org
+      - imf.org
+      - nature.com
+      - science.org
+      - thelancet.com
+      - nejm.org
+      - bmj.com
+      - cell.com
+      - springer.com
+      - sciencedirect.com
+      - wiley.com
+      - tandfonline.com
+      - ieee.org
+      - acm.org
+      - plos.org
+      - pnas.org
+      - frontiersin.org
+      - mdpi.com
+      - jamanetwork.com
+      - cochranelibrary.com
+      # Indian regulators and official operators that do not use .gov.in
+      - rbi.org.in
+      - npci.org.in
+
+  2:
+    label: Reputable media and reference
+    weight: 0.7
+    suffixes: []
+    domains:
+      - reuters.com
+      - apnews.com
+      - bbc.com
+      - bbc.co.uk
+      - npr.org
+      - pbs.org
+      - theguardian.com
+      - nytimes.com
+      - washingtonpost.com
+      - economist.com
+      - ft.com
+      - bloomberg.com
+      - thehindu.com
+      - indianexpress.com
+      - livemint.com
+      - business-standard.com
+      - hindustantimes.com
+      - ndtv.com
+      - indiatimes.com
+      - britannica.com
+      - wikipedia.org
+      - scientificamerican.com
+      - newscientist.com
+      - nationalgeographic.com
+      - mayoclinic.org
+      - clevelandclinic.org
+      - arxiv.org
+      - ourworldindata.org
+
+  3:
+    label: General website
+    weight: 0.4
+    suffixes: []
+    domains: []
+
+  4:
+    label: Forum, social media or user content
+    weight: 0.1
+    suffixes: []
+    domains:
+      - reddit.com
+      - quora.com
+      - facebook.com
+      - instagram.com
+      - x.com
+      - twitter.com
+      - tiktok.com
+      - pinterest.com
+      - youtube.com
+      - answers.com
+      - blogspot.com
+      - wordpress.com
+      - tumblr.com
+
+# per-site weight changes inside a tier, with the reason shown in the report
+overrides:
+  wikipedia.org: {weight: 0.6, reason: "encyclopedia anyone can edit, used to find primary sources"}
+  arxiv.org: {weight: 0.75, reason: "preprint server, papers are not yet peer reviewed"}

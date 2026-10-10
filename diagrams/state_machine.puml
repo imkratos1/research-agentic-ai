@@ -1,0 +1,35 @@
+@startuml state_machine
+!include style.puml
+title Research run - state machine diagram
+hide empty description
+
+state "Running" as running {
+  state "Plan" as plan
+  state "Research\n(ReAct loop)" as research
+  state "Extract" as extract
+  state "Cross-validate\n(with re-search)" as validate
+  state "Write" as write
+  state "Publish" as publish
+  [*] --> plan
+  plan --> research : questions saved
+  research --> extract : enough sources,\nfinish accepted\nor budget used
+  extract --> validate : claims saved
+  validate --> write : labels saved
+  write --> publish : report written
+  publish --> [*] : PDF built
+}
+
+state "Stopped" as stopped #FFE0B2
+stopped : progress kept in state.json
+stopped : last error kept in trace.jsonl
+
+state "Finished" as finished #C8E6C9
+finished : runs/<id>/report.pdf
+finished : copy in the main folder
+
+[*] --> running : Start research\n(topic, depth)
+running --> stopped : error, no source saved,\nor daily Gemini quota used up
+stopped --> running[H] : Resume\n(finished phases are skipped)
+running --> finished
+finished --> [*]
+@enduml

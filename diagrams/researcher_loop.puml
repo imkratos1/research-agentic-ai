@@ -1,0 +1,46 @@
+@startuml researcher_loop
+!include style.puml
+title Researcher agent loop (ReAct) - activity diagram
+
+|Researcher (Python)|
+start
+:Build the task message
+(questions, targets per question,
+sources saved before a resume);
+repeat
+  |Gemini API|
+  :Reason about progress and
+  choose the next tool calls;
+  |Researcher (Python)|
+  if (Reply contains tool calls?) then (no)
+    if (Questions still need sources
+    and fewer than 2 reminders sent?) then (yes)
+      :Remind Gemini which
+      questions still need sources;
+    else (no)
+      break
+    endif
+  else (yes)
+    fork
+      :Search tool
+      (web, news, Wikipedia, papers);
+    fork again
+      :open_source (read the page,
+      score its trust tier,
+      save it under a lock);
+    fork again
+      :coverage_report or
+      finish_research
+      (refused while a
+      question has
+      no source);
+    end fork
+    :Send every result back in one message
+    (role "user", marked untrusted_data);
+  endif
+repeat while (Finished, source budget reached,\nevery question covered or turns used up?) is (no)
+-> yes;
+:Return the saved sources
+to the pipeline;
+stop
+@enduml

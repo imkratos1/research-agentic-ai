@@ -1,0 +1,115 @@
+@startuml classes
+!include style.puml
+title Research data model - class diagram (agent/models.py)
+hide empty members
+
+class ResearchState {
+  + topic : str
+  + depth : str
+  + started : str
+  + questions : list[Question]
+  + sources : list[Source]
+  + claims : list[Claim]
+  + groups : list[ClaimGroup]
+  + searches : list[str]
+  + failed_urls : list[str]
+  + report : Report | None
+  --
+  + add_source(source) : Source
+  + find_source(source_id) : Source
+  + source_for_url(url) : Source
+  + coverage() : dict
+  + save(folder)
+  + {static} load(folder) : ResearchState
+}
+
+class Question {
+  + id : str
+  + text : str
+  + search_queries : list[str]
+}
+
+class Source {
+  + id : str
+  + url : str
+  + title : str
+  + domain : str
+  + tier : int
+  + weight : float
+  + reasons : list[str]
+  + author : str
+  + date : str
+  + found_by : str
+  + question_ids : list[str]
+  + abstract_only : bool
+  + text : str
+}
+
+class Claim {
+  + id : str
+  + text : str
+  + quote : str
+  + kind : str
+  + question_id : str
+  + source_id : str
+}
+
+class ClaimGroup {
+  + id : str
+  + question_id : str
+  + main_claim : str
+  + claim_ids : list[str]
+  + supporting_sources : list[str]
+  + contradicting_sources : list[str]
+  + partial_sources : list[str]
+  + independent_sites : int
+  + score : float
+  + confidence : str
+  + note : str
+}
+
+class Report {
+  + title : str
+  + summary : list[KeyFinding]
+  + sections : list[Section]
+  + contested : list[str]
+  + limitations : list[str]
+}
+
+class KeyFinding {
+  + confidence : str
+  + text : str
+}
+
+class Section {
+  + heading : str
+  + paragraphs : list[str]
+}
+
+enum "Claim.kind values" as ClaimKind {
+  fact
+  statistic
+  opinion
+}
+
+enum "confidence values" as Confidence {
+  VERIFIED
+  LIKELY
+  CONTESTED
+  UNVERIFIED
+}
+
+ResearchState "1" *-- "4..8" Question
+ResearchState "1" *-- "0..*" Source
+ResearchState "1" *-- "0..*" Claim
+ResearchState "1" *-- "0..*" ClaimGroup
+ResearchState "1" *-- "0..1" Report
+Report "1" *-- "1..*" Section
+Report "1" *-- "0..*" KeyFinding
+Claim "0..*" --> "1" Source : comes from
+Claim "0..*" --> "1" Question : answers
+ClaimGroup "1" o-- "1..*" Claim : groups
+Claim ..> ClaimKind
+ClaimGroup ..> Confidence
+KeyFinding ..> Confidence
+@enduml

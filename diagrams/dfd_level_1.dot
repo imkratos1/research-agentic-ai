@@ -1,0 +1,62 @@
+// data flow diagram level 1 in Gane-Sarson notation, drawn with Graphviz (dot)
+digraph dfd_level_1 {
+  graph [fontname="Arial", rankdir=TB, newrank=true, nodesep=0.5, ranksep=1.0, pad=0.35, splines=true,
+         label=<<b>Data flow diagram - level 1</b>>, labelloc=t, fontsize=20, fontcolor="#1A237E"]
+  node  [fontname="Arial", fontsize=12, fontcolor="#263238", shape=plain]
+  edge  [fontname="Arial", fontsize=10, color="#607D8B", fontcolor="#37474F", arrowsize=0.8, penwidth=1.1]
+
+  // external entities (User is drawn twice, marked with *, to avoid a long crossing line)
+  node [shape=box, style=filled, fillcolor="#FFF3E0", color="#FB8C00", penwidth=1.5, margin="0.25,0.2"]
+  user_in  [label=<<b>User</b>>]
+  user_out [label=<<b>User *</b>>]
+  gemini   [label=<<b>Gemini API</b>>]
+  searches [label=<<table border="0" cellspacing="0" cellpadding="1"><tr><td><b>Search services</b></td></tr><tr><td><font point-size="10">DuckDuckGo, Wikipedia, OpenAlex</font></td></tr></table>>]
+  websites [label=<<table border="0" cellspacing="0" cellpadding="1"><tr><td><b>Websites</b></td></tr><tr><td><font point-size="10">HTML and PDF</font></td></tr></table>>]
+
+  // processes: rounded box with the process number on top
+  node [shape=plain, style="", margin=0]
+  p1 [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="7" style="rounded" color="#3949AB" bgcolor="#E8EAF6"><tr><td><b>1.0</b></td></tr><hr/><tr><td width="120">Plan research<br/>questions</td></tr></table>>]
+  p2 [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="7" style="rounded" color="#3949AB" bgcolor="#E8EAF6"><tr><td><b>2.0</b></td></tr><hr/><tr><td width="120">Search and<br/>collect sources</td></tr></table>>]
+  p3 [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="7" style="rounded" color="#3949AB" bgcolor="#E8EAF6"><tr><td><b>3.0</b></td></tr><hr/><tr><td width="120">Extract<br/>claims</td></tr></table>>]
+  p4 [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="7" style="rounded" color="#3949AB" bgcolor="#E8EAF6"><tr><td><b>4.0</b></td></tr><hr/><tr><td width="120">Cross-validate<br/>claims</td></tr></table>>]
+  p5 [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="7" style="rounded" color="#3949AB" bgcolor="#E8EAF6"><tr><td><b>5.0</b></td></tr><hr/><tr><td width="120">Write and check<br/>report</td></tr></table>>]
+  p6 [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="7" style="rounded" color="#3949AB" bgcolor="#E8EAF6"><tr><td><b>6.0</b></td></tr><hr/><tr><td width="120">Build PDF</td></tr></table>>]
+
+  // data stores: open-ended rectangle with the store number on the left
+  d1 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="6" color="#546E7A"><tr><td sides="LTBR" bgcolor="#CFD8DC"><b>D1</b></td><td sides="TB" bgcolor="#ECEFF1">Research state<br/><font point-size="9">runs/&lt;id&gt;/state.json</font></td></tr></table>>]
+  d2 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="6" color="#546E7A"><tr><td sides="LTBR" bgcolor="#CFD8DC"><b>D2</b></td><td sides="TB" bgcolor="#ECEFF1">Trust list<br/><font point-size="9">trusted_sources.yaml</font></td></tr></table>>]
+  d3 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="6" color="#546E7A"><tr><td sides="LTBR" bgcolor="#CFD8DC"><b>D3</b></td><td sides="TB" bgcolor="#ECEFF1">Response cache<br/><font point-size="9">data/cache/</font></td></tr></table>>]
+
+  // main flow along the row of processes
+  user_in -> p1 [label="topic,\ndepth"]
+  p5 -> p6 [label="report\nsections"]
+  p6 -> user_out [label="PDF\nreport"]
+  p4 -> p2 [style=dashed, color="#E65100", fontcolor="#E65100", label="re-search\nweak claims", constraint=false]
+
+  // every process talks to Gemini (prompt out, structured reply back)
+  gemini -> p1 [dir=both, label="prompt /\nquestions"]
+  gemini -> p2 [dir=both, label="tool results /\ntool calls"]
+  gemini -> p3 [dir=both, label="source text /\nclaims"]
+  gemini -> p4 [dir=both, label="claims /\nembeddings, verdicts"]
+  gemini -> p5 [dir=both, label="prompts /\ncited sections"]
+
+  // the research state is shared by all processes
+  p1 -> d1 [label="questions"]
+  p2 -> d1 [dir=both, label="questions /\nscored sources"]
+  p3 -> d1 [dir=both, label="source text /\nclaims"]
+  p4 -> d1 [dir=both, label="claims /\nconfidence labels"]
+  p5 -> d1 [dir=back, label="verified and\nlikely claims"]
+  p6 -> d1 [dir=back, label="sources,\nlabels"]
+
+  // outside data used by process 2.0 and 4.0
+  p2 -> searches [dir=both, label="queries /\nresult lists"]
+  p2 -> websites [dir=both, label="page requests /\npage text"]
+  d2 -> p2 [label="trust tiers"]
+  d2 -> p4 [label="trust weights"]
+  p2 -> d3 [dir=both, style=dashed, label="saved\nresponses"]
+
+  { rank=same; user_in; p1; p2; p3; p4; p5; p6; user_out }
+  p1 -> p2 -> p3 -> p4 -> p5 [style=invis, weight=10]
+  { rank=same; gemini; d2 }
+  { rank=same; searches; websites; d3; d1 }
+}

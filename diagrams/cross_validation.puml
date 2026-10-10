@@ -1,0 +1,50 @@
+@startuml cross_validation
+!include style.puml
+title Cross-validation of claims - activity diagram
+
+|Verifier (Python)|
+start
+:Find copied stories
+(sources sharing most 8-word phrases);
+repeat
+  :Take the claims for the next research question
+  (opinions are left out);
+  :Sort claims so the most trusted source comes first;
+  |Gemini API|
+  :Turn each claim into an embedding
+  (gemini-embedding-2);
+  |Verifier (Python)|
+  :Group claims with cosine similarity >= 0.85;
+  |Gemini API|
+  :For groups with 2+ sources, decide: supports,
+  contradicts or partly supports the main claim;
+  |Verifier (Python)|
+  :Count independent websites
+  (copies and same website count once);
+  if (A tier 1 or 2 source disagrees?) then (yes)
+    #FFE0B2:Label **Contested**;
+  elseif (2+ independent websites agree,
+  at least one is tier 1 or 2?) then (yes)
+    #C8E6C9:Label **Verified**;
+  elseif (A tier 1 source, or
+  2+ independent websites?) then (yes)
+    #DCEDC8:Label **Likely**;
+  else (no)
+    #FFCDD2:Label **Unverified**;
+  endif
+repeat while (More questions?) is (yes)
+-> no;
+if (Any Unverified groups?) then (yes)
+  |Search tools|
+  :Targeted web + OpenAlex search
+  for the weakest claims;
+  :Open the best new tier 1-2 source;
+  |Gemini API|
+  :Extract claims from the new sources;
+  |Verifier (Python)|
+  :Check those questions again;
+else (no)
+endif
+:Save labels to state.json;
+stop
+@enduml
