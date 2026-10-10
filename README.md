@@ -1,15 +1,24 @@
 # DeepResearch Agent
 
+## Demo
+
+[![Demo: the agent researching "Is the Great Wall of China visible from space with the naked eye?", sped up about 12 times](media/research_demo.gif)](media/research_demo.mp4)
+
+A full research run on the test case *"Is the Great Wall of China visible from space with the naked eye?"*, sped up about 12 times: from pressing **Start research**, through the six phases with the live agent log, to the finished report and its PDF. The real run took 3 minutes 35 seconds.
+
+**[▶ Open the full-quality video (media/research_demo.mp4, 37 seconds)](media/research_demo.mp4)**
+
+---
+
 ### An agentic AI that researches a topic on the web, cross-validates every fact against trusted sources, and writes a cited PDF report
 
 **Project documentation · AI course · B.Tech Computer Science**
-
-![Home page of the DeepResearch Agent](media/home.png)
 
 ---
 
 ## Contents
 
+0. [Demo](#demo)
 1. [Abstract](#1-abstract)
 2. [Introduction](#2-introduction)
 3. [Background concepts](#3-background-concepts)
@@ -449,13 +458,7 @@ Buttons press down when clicked. The design is defined in `style.css` and `.stre
 
 **Earlier runs and resume:** the sidebar lists every earlier run. A stopped run shows why it stopped and has a **Resume** button.
 
-### Demo video
-
-A short sped-up recording of a full research run on the test case *"Is the Great Wall of China visible from space with the naked eye?"*, from clicking **Start research** to the finished report:
-
-<video src="media/research_demo.mp4" controls width="100%"></video>
-
-If the player does not appear, open [media/research_demo.mp4](media/research_demo.mp4).
+The full sped-up demo of the web page is at the [top of this document](#demo).
 
 ---
 
@@ -529,7 +532,7 @@ Each PDF is also stored with its full research record (`state.json`, `trace.json
 
 ### 11.3 Test case 2 – Is the Great Wall of China visible from space?
 
-*"Is the Great Wall of China visible from space with the naked eye?"* This is the run shown in the [demo video](#demo-video).
+*"Is the Great Wall of China visible from space with the naked eye?"* This is the run shown in the [demo](#demo).
 
 - **Sources:** 10 in total, 7 of them tier 1, including three NASA pages, Nature and NIH. The Researcher used 13 turns, and the Verifier's targeted searches added 3 more sources.
 - **Result:** the popular claim was **not** confirmed. The Verified findings say the opposite:
